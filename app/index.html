@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.15.0/css/mdb.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="styles/styles.css" rel="stylesheet">
+    <title>Movie Recommendations</title>
+</head>
+<body class="elegant-color-dark">
+
+<div class="container">
+    <!-- title -->
+    <div class="row align-items-center">
+        <div class="col-sm-12">
+            <header>
+                <h4 class="animated fadeIn my-2 text-light .text-justify">
+                    <img src="sources/icons/one.png" width="40" class="mr-2"><span class="font-weight-bold">Choose three (3) Movies</span> you prefer. They will help the system to recommend you better movies!
+                </h4>
+            </header>
+        </div>
+    </div>
+    <!-- title ends -->
+    <div class="row row-cols-md-6 justify-content-center listOfCSmovies" id="listofCSmovies">
+    </div>
+    <div class="row align-items-center my-2">
+        <div class="col-sm-12">
+            <header>
+                <h4 class="animated fadeIn text-light .text-justify">
+                    <img src="sources/icons/two.png" width="40" class="mr-2">Select your <span class="font-weight-bold">Genres</span> preferences. The system will consider them for your recommendations!
+                </h4>
+            </header>
+        </div>
+    </div>
+    <div class="row mt-2 justify-content-center">
+        <div class="col-sm-2 text-center mr-3">
+            <h5 class="text-light">
+                <i class="far fa-laugh-beam fa-lg mr-1 text-light"></i>
+                Comedies
+            </h5>
+            <input type="range" class="custom-range" min="0" max="100" step="25" id="sliderComediesCS">
+            <span class="text-light" id="valueComediesCS"></span>
+        </div>
+        <div class="col-sm-2 text-center mr-3">
+            <h5 class="text-light">
+                <i class="far fa-grimace fa-lg mr-1 text-light"></i>
+                Horrors
+            </h5>
+            <input type="range" class="custom-range" min="0" max="100" step="25" id="sliderHorrorCS">
+            <span class="text-light" id="valueHorrorCS"></span>
+        </div>
+        <div class="col-sm-2 text-center">
+            <h5 class="text-light">
+                <i class="far fa-grin-hearts fa-lg mr-1 text-light"></i>
+                Romances
+            </h5>
+            <input type="range" class="custom-range" min="0" max="100" step="25"  id="sliderRomanceCS">
+            <span class="text-light" id="valueRomanceCS"></span>
+        </div>
+        <div class="col-sm-2 text-center ml-3">
+            <h5 class="text-light">
+                <i class="far fa-sad-cry fa-lg mr-1 text-light"></i>
+                Dramas
+            </h5>
+            <input type="range" class="custom-range" min="0" max="100" step="25"  id="sliderDramaCS">
+            <span class="text-light" id="valueDramaCS"></span>
+        </div>
+        <div class="col-sm-2 text-center ml-3">
+            <h5 class="text-light">
+                <i class="far fa-surprise fa-lg mr-1 text-light"></i>
+                Adventures
+            </h5>
+            <input type="range" class="custom-range" min="0" max="100" step="25"  id="sliderAdventureCS">
+            <span class="text-light" id="valueAdventureCS"></span>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-sm-12">
+            <a id="recSysButton" href="recsys.html" role="button" onclick="goToRecommendations()" class="btn btn-outline-light btn-lg btn-block text-light disabled csButton">
+                Please, select your favorite movies and your genre preferences before going to your recommendations
+            </a>
+        </div>
+    </div>
+    <div class="row my-2 align-items-center">
+        <div class="col-sm-12">
+            <footer>
+                <p class="animated fadeIn pt-sm-3 pb-sm-1 text-light text-center">
+                    All Movies and Their Content Powered by <img src="sources/logos/tmdbFooter.svg" width="140">
+                </p>
+            </footer>
+        </div>
+    </div>
+</div>
+<!-- Optional JavaScript -->
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.15.0/js/mdb.min.js"></script>
+<!-- Scripts -->
+<script type="text/javascript" src="scripts/cS.js"></script>
+</body>
+</html>

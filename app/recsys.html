@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.15.0/css/mdb.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="styles/styles.css" rel="stylesheet">
+    <title>Movie Recommendations</title>
+</head>
+<body class="elegant-color-dark">
+
+<div class="container">
+    <!-- title -->
+    <div class="row mt-2">
+        <div class="col-sm-12">
+            <header>
+                <h2 class="animated fadeIn py-sm-1 text-light text-center border border-light rounded-lg">
+                    Welcome to your Personalized Movie Recommendation System
+                    <a id='recsysExplanationButton' role='button' onclick='showRecSysExplanation()'>
+                        <i class='far fa-question-circle fa-sm text-light csButton'></i>
+                    </a>
+                </h2>
+            </header>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div id="recSysExplanation" class="col-sm-12 m-2 elegant-color-dark recSysExplanation invisible animated fadeIn">
+        <h3 class="animated fadeIn py-sm-1 text-light text-center font-weight-bold">
+                This is a general explanation for this Personalized Movie Recommendation System:
+        </h3>
+        <p class="text-light text-justify animated fadeIn py-sm-1">
+            <span class="font-weight-bold">The TMDB API serves all the movie recommendations</span>. Their system
+            seems to be based mostly on <span class="font-weight-bold">the behavior of their community</span> such
+            as what movies have they rated highly and movies with similar language, genres, and others.
+            <span class="font-weight-bold">The TMDB also defines which genres belong to an specific movie.</span>
+        </p>
+        <p class="text-light text-justify animated fadeIn py-sm-1">
+            We are using their service to filter out these recommendations by movie GENRES as following:
+            <ol class="text-light">
+                <li class="mb-2">
+                    Based on your 3 preferred movies, we build a list of <span class="font-weight-bold"> recommendations
+                    produced by the TMDB API</span>
+                </li>
+                <li class="mb-2">
+                    Besides the 3 movies you preferred, you have also expressed how much you like
+                    five different movie genres: Comedy, Horror, Romance, Drama, and Adventure. The amount of
+                    preference that you have chosen for each genre <span class="font-weight-bold">will determine
+                    the amount of movie recommendations that you will get in your final recommendations</span>
+                </li>
+                <li class="mb-2">
+                    Therefore, the system in the end shows a list of <span class="font-weight-bold">movie recommendations
+                    based on your preferred movies and your previous genre preferences</span>. For example, the more
+                    COMEDIES you prefer in comparison with other genres, the more comedies will appear for your recommendations
+                </li>
+                <li class="mb-2">
+                    If the system cannot find enough movies for a specific genre from your personalized recommendations
+                    list, <span class="font-weight-bold">the system will fulfill your gender preferences with movie
+                    suggestions. These suggestions are based on movie recommendations from three of the most recent Oscar's
+                    best picture movie awards: "Parasite"(2020), "Green Book"(2019), and "The Shape Of Water"(2018)</span>.
+                </li>
+                <li class="mb-2">
+                    If you prefer random recommendations based on your three preferred movies, <span class="font-weight-bold">
+                    reduce all genre preferences to 0(zero).</span>
+                </li>
+                <li class="mb-2">
+                    Feel free to check the "?" mark in every movie, there is a <span class="font-weight-bold">specific explanation
+                    to know why it has been recommended </span> At the bottom of every movie, you will also find a
+                    <span class="font-weight-bold">TMDB rating for that movie according to their community's voting</span>. All
+                    shown movies will be ordered based in this rating from left to right, showing first your recommended movies and
+                    second our movie suggestions.
+                </li>
+            </ol>
+        </p>
+    </div>
+    </div>
+</div>
+
+<div id="moviesPanel" class="container-fluid">
+    <div class="row align-items-center justify-content-center" >
+        <div class="d-flex col-sm-1 pl-4 justify-content-end">
+            <a class="btn btn-light" role="button" id="navLeft">
+                <i class="fas fa-angle-left fa-3x text-black-50"></i>
+            </a>
+        </div>
+        <div class="col-sm-10 d-flex flex-sm-nowrap mt-2 px-5 listOfMovies animated fadeIn slow" id="listOfMovies">
+        </div>
+        <div class="col-sm-1">
+            <a class="btn btn-light" role="button" id="navRight">
+                <i class="fas fa-angle-right fa-3x text-black-50"></i>
+            </a>
+        </div>
+    </div>
+</div>
+<div id="controlsPanel" class="container">
+    <div class="row mt-2">
+        <div class="col-sm-12">
+            <header>
+                <h5 class="animated fadeIn py-sm-1 text-light">
+                    Select your <span class="font-weight-bold">Genre</span> preference. The more you increase one of them, more movies from that genre you will get!
+                </h5>
+            </header>
+        </div>
+    </div>
+    <div class="row mt-2 justify-content-center">
+        <div class="col-sm-2 text-center mr-3">
+            <h5 class="text-light">
+                <i class="far fa-laugh-beam fa-lg mr-1 text-light"></i>
+                Comedies
+            </h5>
+            <div class="small text-light font-weight-lighter" id="comediesShownAmount"></div>
+            <input type="range" class="custom-range" min="0" max="100" step="25" id="sliderComedies">
+            <span class="text-light" id="valueComedies"></span>
+        </div>
+        <div class="col-sm-2 text-center mr-3">
+            <h5 class="text-light">
+                <i class="far fa-grimace fa-lg mr-1 text-light"></i>
+                Horrors
+            </h5>
+            <div class="small text-light font-weight-lighter" id="horrorsShownAmount"></div>
+            <input type="range" class="custom-range" min="0" max="100" step="25" id="sliderHorror">
+            <span class="text-light" id="valueHorror"></span>
+        </div>
+        <div class="col-sm-2 text-center">
+            <h5 class="text-light">
+                <i class="far fa-grin-hearts fa-lg mr-1 text-light"></i>
+                Romances
+            </h5>
+            <div class="small text-light font-weight-lighter" id="romancesShownAmount"></div>
+            <input type="range" class="custom-range" min="0" max="100" step="25" id="sliderRomance">
+            <span class="text-light" id="valueRomance"></span>
+        </div>
+        <div class="col-sm-2 text-center ml-3">
+            <h5 class="text-light">
+                <i class="far fa-sad-cry fa-lg mr-1 text-light"></i>
+                Dramas
+            </h5>
+            <div class="small text-light font-weight-lighter" id="dramasShownAmount"></div>
+            <input type="range" class="custom-range" min="0" max="100" step="25" id="sliderDrama">
+            <span class="text-light" id="valueDrama"></span>
+        </div>
+        <div class="col-sm-2 text-center ml-3">
+            <h5 class="text-light">
+                <i class="far fa-surprise fa-lg mr-1 text-light"></i>
+                Adventures
+            </h5>
+            <div class="small text-light font-weight-lighter" id="adventuresShownAmount"></div>
+            <input type="range" class="custom-range" min="0" max="100" step="25" id="sliderAdventure">
+            <span class="text-light" id="valueAdventure"></span>
+        </div>
+    </div>
+    <div class="row my-2 align-items-center">
+        <div class="col-sm-12">
+            <footer>
+                <p class="animated fadeIn pt-sm-3 pb-sm-1 text-light text-center">
+                    All Movies and Their Content Powered by <img src="sources/logos/tmdbFooter.svg" width="140">
+                </p>
+            </footer>
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.15.0/js/mdb.min.js"></script>
+<!-- Scripts -->
+<script type="text/javascript" src="scripts/recSys.js"></script>
+</body>
+</html>
