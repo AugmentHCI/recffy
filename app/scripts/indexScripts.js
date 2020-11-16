@@ -5,6 +5,85 @@ const tmdbAPIbaseURL = "https://api.themoviedb.org/3/movie/";
 const firstMovieId=399055; // The Shape of Water
 const secondMovieId=496243; // Parasite
 
+const TMDBgenres = [
+    {
+        "id": 28,
+        "name": "Action"
+    },
+    {
+        "id": 12,
+        "name": "Adventure"
+    },
+    {
+        "id": 16,
+        "name": "Animation"
+    },
+    {
+        "id": 35,
+        "name": "Comedy"
+    },
+    {
+        "id": 80,
+        "name": "Crime"
+    },
+    {
+        "id": 99,
+        "name": "Documentary"
+    },
+    {
+        "id": 18,
+        "name": "Drama"
+    },
+    {
+        "id": 10751,
+        "name": "Family"
+    },
+    {
+        "id": 14,
+        "name": "Fantasy"
+    },
+    {
+        "id": 36,
+        "name": "History"
+    },
+    {
+        "id": 27,
+        "name": "Horror"
+    },
+    {
+        "id": 10402,
+        "name": "Music"
+    },
+    {
+        "id": 9648,
+        "name": "Mystery"
+    },
+    {
+        "id": 10749,
+        "name": "Romance"
+    },
+    {
+        "id": 878,
+        "name": "Science Fiction"
+    },
+    {
+        "id": 10770,
+        "name": "TV Movie"
+    },
+    {
+        "id": 53,
+        "name": "Thriller"
+    },
+    {
+        "id": 10752,
+        "name": "War"
+    },
+    {
+        "id": 37,
+        "name": "Western"
+    }
+];
+
 let currentSelectedMovieId = -1;
 let limitleft = -1;
 let limitRight = -1;
@@ -21,9 +100,8 @@ const $sliderRomance = $('#sliderRomance');
 
 let moviesAverageWidth = 0;
 
-let movieListRecSys = [];
-let othersListRecSys = [];
-let finalListOfRecommendedMovies = [];
+let movieListRecSys = []; //all recommended movies
+let finalListOfRecommendedMovies = []; //Final list of 20 recommended movies shown to the user
 
 let countHeight = 0;
 
@@ -32,38 +110,21 @@ $(document).ready(function () {
     loadRecommendedMovies();
 });
 
-function loadRecommendedMovies() {//here
-    let firstMovieId = firstMovie.id, secondMovieId = secondMovie.id, thirdMovieId = thirdMovie.id;
-    let firstMovieName = firstMovie.title, secondMovieName = secondMovie.title, thirdMovieName = thirdMovie.title;
-    let firstMovieRecs = [], secondMovieRecs = [], thirdMovieRecs = [];
-    let others = [], others1 = [], others2 = [], others3 = [], others4 = [];
+function loadRecommendedMovies() {
+    let firstMovieRecs = [], secondMovieRecs = [], thirdMovieRecs = [], fourthMovieRecs = [];
     getRecommendedMoviesBasedOnMovie(firstMovieId, 1, function (result) {
-        firstMovieRecs = assignExplanation(result.results,firstMovieName);
+        firstMovieRecs = assignExplanation(result.results,"The Shape of Water");
         getRecommendedMoviesBasedOnMovie(secondMovieId, 1, function (result) {
-            secondMovieRecs = assignExplanation(result.results,secondMovieName);
-            getRecommendedMoviesBasedOnMovie(thirdMovieId, 1, function (result) {
-                thirdMovieRecs = assignExplanation(result.results,thirdMovieName);
-                getRecommendedMoviesBasedOnMovie(othersId, 1, function (result) {
-                    others1 = result.results;
-                    getRecommendedMoviesBasedOnMovie(othersId, 2, function (result) {
-                        others2 = others1.concat(result.results);
-                        getRecommendedMoviesBasedOnMovie(others2Id, 2, function (result) {
-                            others3 = others2.concat(result.results);
-                            getRecommendedMoviesBasedOnMovie(othersId, 2, function (result) {
-                                others = others3.concat(result.results);
-                                let listOfAllRecommendations = firstMovieRecs.concat(secondMovieRecs, thirdMovieRecs);
-                                eraseRepeatedMovies(listOfAllRecommendations, firstMovieId, secondMovieId, thirdMovieId);
-                                randomizeMovies(listOfAllRecommendations);
-                                setMovieList(listOfAllRecommendations);
-                                eraseRepeatedMovies(others,firstMovieId, secondMovieId, thirdMovieId);
-                                eraseRepeatedMoviesForOthers(others,listOfAllRecommendations);
-                                randomizeMovies(others);
-                                setOthersList(others);
-                                setTMDBgenres();
-                                createRecommendations();
-                            });
-                        });
-                    });
+            secondMovieRecs = assignExplanation(result.results,"Parasite");
+            getRecommendedMoviesBasedOnMovie(firstMovieId, 2, function (result) {
+                thirdMovieRecs = assignExplanation(result.results,"The Shape of Water");
+                getRecommendedMoviesBasedOnMovie(secondMovieId, 2, function (result) {
+                    fourthMovieRecs = assignExplanation(result.results,"Parasite");
+                    let listOfAllRecommendations = firstMovieRecs.concat(secondMovieRecs, thirdMovieRecs,fourthMovieRecs);
+                    eraseRepeatedMovies(listOfAllRecommendations, firstMovieId, secondMovieId);
+                    randomizeMovies(listOfAllRecommendations);
+                    setMovieList(listOfAllRecommendations);
+                    createRecommendations();
                 });
             });
         });
@@ -71,17 +132,28 @@ function loadRecommendedMovies() {//here
 }
 
 function assignExplanation(listOfMovies, movieExplanation) {
-    if (movieExplanation==="Random"){
-        for (let i=0;i<listOfMovies.length;i++){
-            listOfMovies[i].movieExplanation = "This movie is a random recommendation";
-        }
-    }
-    else {
-        for (let i=0;i<listOfMovies.length;i++){
-            listOfMovies[i].movieExplanation = "Recommended because you preferred <strong class='text-uppercase'>" + movieExplanation + "</strong>";
-        }
+    for (let i=0;i<listOfMovies.length;i++){
+        listOfMovies[i].movieExplanation = "Recommended because you liked <strong class='text-uppercase'>" + movieExplanation + "</strong>";
     }
     return listOfMovies;
+}
+
+function eraseRepeatedMovies(movieList, firstId, secondId) {
+    for (let i=0;i<movieList.length;i++){
+        let firstMovie = movieList[i];
+        for (let j = i+1;j<movieList.length;j++){
+            let secondMovie = movieList[j];
+            while ((j<movieList.length)&&(firstMovie.id===secondMovie.id)){
+                movieList.splice(j,1);
+                secondMovie = movieList[j];
+            }
+        }
+    }
+    for (let i=0;i<movieList.length;i++){
+        while ((movieList[i].id===(firstId))||(movieList[i].id===(secondId))){
+            movieList.splice(i,1);
+        }
+    }
 }
 
 function randomizeMovies(listOfMovies) {
@@ -95,64 +167,32 @@ function randomizeMovies(listOfMovies) {
     }
 }
 
-function eraseRepeatedMovies(movieList, firstId, secondId, thirdId) {
-    for (let i=0;i<movieList.length;i++){
-        let firstMovie = movieList[i];
-        for (let j = i+1;j<movieList.length;j++){
-            let secondMovie = movieList[j];
-            while ((j<movieList.length)&&(firstMovie.id===secondMovie.id)){
-                movieList.splice(j,1);
-                secondMovie = movieList[j];
-            }
-        }
-    }
-    for (let i=0;i<movieList.length;i++){
-        while (movieList[i].id===(firstId||secondId||thirdId)){
-            movieList.splice(i,1);
-        }
-    }
-}
-
-function eraseRepeatedMoviesForOthers(othersList,movieList) {
-    for (let i=0;i<movieList.length;i++){
-        let movie = movieList[i];
-        for (let j = 0;j<othersList.length;j++){
-            let otherMovie = othersList[j];
-            if ((otherMovie.id===movie.id)){
-                othersList.splice(j,1);
-            }
-        }
-    }
-}
-
 function setMovieList(movies) {
     movieListRecSys = movies;
 }
 
-function setOthersList(movies) {
-    othersListRecSys = movies;
-}
-
-function createRecommendations() { //check from here
-    let amountComedies = obtainAmountofMoviesByGenderFromControls(35),
-        amountHorrors = obtainAmountofMoviesByGenderFromControls(27),
-        amountRomances = obtainAmountofMoviesByGenderFromControls(10749),
-        amountDramas = obtainAmountofMoviesByGenderFromControls(18),
-        amountAdventures = obtainAmountofMoviesByGenderFromControls(12);
+function createRecommendations() {
+    let amountJoy = obtainAmountofMoviesByGenderFromControls(35),
+        amountScariness = obtainAmountofMoviesByGenderFromControls(27),
+        amountLoving = obtainAmountofMoviesByGenderFromControls(10749),
+        amountPensive = obtainAmountofMoviesByGenderFromControls(18),
+        amountAmusement = obtainAmountofMoviesByGenderFromControls(12);
     let listof20RecommendedMovies = [];
-    if ((amountComedies+amountHorrors+amountRomances+amountDramas+amountAdventures)>0){
-        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountHorrors,27);
-        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountAdventures,12);
-        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountRomances,10749);
-        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountComedies,35);
-        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountDramas,18);
-        listof20RecommendedMovies.sort(orderByRating);
-        listof20RecommendedMovies.sort(orderByComplementary);
+    if (amountJoy + amountScariness + amountLoving + amountPensive + amountAmusement <= 0){
+        fillRandomRecommendations(listof20RecommendedMovies);
     }
     else{
-        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,15,0);
-        listof20RecommendedMovies.sort(orderByRatingRandom);
+        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountJoy,"Joy");
+        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountScariness,"Scariness");
+        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountLoving,"Loving");
+        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountPensive,"Pensive");
+        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountAmusement,"Amusement");
+        if (listof20RecommendedMovies<20){
+            fillRandomRecommendations(listof20RecommendedMovies);
+        }
     }
+    listof20RecommendedMovies.sort(orderByRating);
+    listof20RecommendedMovies.sort(orderByComplementary);
     setFinalListOfRecommendedMovies(listof20RecommendedMovies);
     setGenresAmountForSliders();
     displayRecommendedMovies(finalListOfRecommendedMovies);
@@ -184,163 +224,113 @@ function obtainAmountofMoviesByGenderFromControls(genre) {
     return Math.floor(20*(amount/sum));
 }
 
+function obtainMoviesByGenderFromTheListOfMovies(list,number,genre) {
+    let genresList = obtainNeededGenres(genre);
+    if (number>0){
+        for (let i=0;i<movieListRecSys.length;i++){
+            if ((movieListRecSys[i].genre_ids.some(id=>genresList.includes(id)))&&(number>0)&&(!list.includes(movieListRecSys[i]))){
+                movieListRecSys[i].mainGenre = genre.toUpperCase();
+                list.push(movieListRecSys[i]);
+                number--;
+            }
+            if (number===0){
+                break;
+            }
+        }
+        while (number>0){
+            let randomNumber = Math.floor(Math.random() * movieListRecSys.length);
+            let randomMovie = movieListRecSys[randomNumber];
+            if (!list.includes(randomMovie)){
+                randomMovie.mainGenre = "RANDOM";
+                randomMovie.movieExplanation = "Recommended due to a lack of movies for " + genre.toUpperCase();
+                listOfMovies.push(randomMovie);
+                number--;
+            }
+        }
+    }
+}
+
+function obtainNeededGenres(genre) {
+    let listOfNeededGenres = [];
+    switch (genre) {
+        case "Joy":
+            listOfNeededGenres = [16,35,10751,14,10402];
+            break;
+        case "Scariness":
+            listOfNeededGenres = [80,27,9648,53];
+            break;
+        case "Loving":
+            listOfNeededGenres = [10749];
+            break;
+        case "Pensive":
+            listOfNeededGenres = [99,18,36];
+            break;
+        case "Amusement":
+            listOfNeededGenres = [28,12,878,10752,37];
+            break;
+    }
+    return listOfNeededGenres;
+}
+
+function fillRandomRecommendations(listOfMovies) {
+    while (listOfMovies.length<20){
+        let randomNumber = Math.floor(Math.random() * movieListRecSys.length);
+        let randomMovie = movieListRecSys[randomNumber];
+        if (!listOfMovies.includes(randomMovie)){
+            randomMovie.mainGenre = "RANDOM";
+            listOfMovies.push(randomMovie);
+        }
+    }
+}
+
+function orderByRating(movie1,movie2){
+    if (movie2.vote_average<movie1.vote_average){
+        return 1;
+    }
+    if(movie2.vote_average>=movie1.vote_average){
+        return -1;
+    }
+    return 0;
+}
+
+function orderByComplementary(movie1,movie2){
+    if (movie1.mainGenre.includes('RANDOM')){
+        return 1;
+    }
+    if (movie2.mainGenre.includes('RANDOM')){
+        return -1;
+    }
+    return 0;
+}
+
 function setGenresAmountForSliders() {
-    let amountComedies = 0, amountHorrors = 0, amountRomances = 0, amountDramas = 0, amountAdventures =0;
+    let amountComedies = 0, amountHorrors = 0, amountRomances = 0, amountDramas = 0, amountAdventures = 0, amountRandom = 0;
     for (let i=0;i<finalListOfRecommendedMovies.length;i++){
-        if (finalListOfRecommendedMovies[i].mainGenre.includes('COMEDY')){
+        if (finalListOfRecommendedMovies[i].mainGenre.includes('JOY')){
             amountComedies++;
         }
-        if (finalListOfRecommendedMovies[i].mainGenre.includes('HORROR')){
+        if (finalListOfRecommendedMovies[i].mainGenre.includes('SCARINESS')){
             amountHorrors++;
         }
-        if (finalListOfRecommendedMovies[i].mainGenre.includes('ROMANCE')){
+        if (finalListOfRecommendedMovies[i].mainGenre.includes('LOVING')){
             amountRomances++;
         }
-        if (finalListOfRecommendedMovies[i].mainGenre.includes('DRAMA')){
+        if (finalListOfRecommendedMovies[i].mainGenre.includes('PENSIVE')){
             amountDramas++;
         }
-        if (finalListOfRecommendedMovies[i].mainGenre.includes('ADVENTURE')){
+        if (finalListOfRecommendedMovies[i].mainGenre.includes('AMUSEMENT')){
+            amountAdventures++;
+        }
+        if (finalListOfRecommendedMovies[i].mainGenre.includes('RANDOM')){
             amountAdventures++;
         }
     }
+    document.getElementById("randomShownAmount").innerHTML = "Showing: <strong>" + amountRandom +"</strong> RANDOM movies";
     document.getElementById("comediesShownAmount").innerHTML = "Showing: <strong>" + amountComedies +"</strong> movies";
     document.getElementById("horrorsShownAmount").innerHTML = "Showing: <strong>" + amountHorrors +"</strong> movies";
     document.getElementById("romancesShownAmount").innerHTML = "Showing: <strong>" + amountRomances +"</strong> movies";
     document.getElementById("dramasShownAmount").innerHTML = "Showing: <strong>" + amountDramas +"</strong> movies";
     document.getElementById("adventuresShownAmount").innerHTML = "Showing: <strong>" + amountAdventures +"</strong> movies";
-}
-
-function obtainMoviesByGenderFromTheListOfMovies(list,number,genre) {
-    if (number>0){
-        if (genre===0){
-            for (let i=0;i<number;i++){
-                let movie = movieListRecSys[i];
-                movie.mainGenre = "RANDOM suggestion";
-                list.push(movie);
-            }
-        }
-        else {
-            for (let i=0;i<movieListRecSys.length;i++){
-                if ((movieListRecSys[i].genre_ids.includes(genre))&&(number>0)&&(!list.includes(movieListRecSys[i]))){
-                    movieListRecSys[i].mainGenre = "Recommended " + assignMainGenre(genre);
-                    list.push(movieListRecSys[i]);
-                    number--;
-                }
-                if (number===0){
-                    break;
-                }
-            }
-            if(number>0){
-                let extraExplanation = getExtraExplanationForGenre(genre);
-                for (let i=0;i<othersListRecSys.length;i++){
-                    if ((number>0)&&(othersListRecSys[i].genre_ids.includes(genre)&&(!list.includes(othersListRecSys[i])))){
-                        othersListRecSys[i].movieExplanation = extraExplanation;
-                        othersListRecSys[i].mainGenre = "Suggested "+assignMainGenre(genre);
-                        list.push(othersListRecSys[i]);
-                        number--;
-                        if (number===0){
-                            break;
-                        }
-                    }
-                }
-                // while (number>0){
-                //     getARandomMovie(list,genre);
-                //     number--;
-                // }
-            }
-        }
-    }
-}
-
-function getARandomMovie(listOfMovies,genre) {
-    randomNumber=Math.floor(Math.random() * finalListOfRecommendedMovies.length);
-    console.log(randomNumber);
-    while (listOfMovies.includes(finalListOfRecommendedMovies[randomNumber])){
-        randomNumber=Math.floor(Math.random() * finalListOfRecommendedMovies.length);
-        console.log(randomNumber);
-    }
-    console.log(listOfMovies);
-    //othersListRecSys[randomNumber].movieExplanation = getExtraExplanationForRandom(genre);
-    finalListOfRecommendedMovies[randomNumber].mainGenre = "A movie suggestion";
-    listOfMovies.push(finalListOfRecommendedMovies[randomNumber]);
-}
-
-function assignMainGenre(genre) {
-    let mainGenre = "";
-    switch (genre) {
-        case 35:
-            mainGenre = "COMEDY";
-            break;
-        case 27:
-            mainGenre = "HORROR";
-            break;
-        case 10749:
-            mainGenre = "ROMANCE";
-            break;
-        case 12:
-            mainGenre = "ADVENTURE";
-            break;
-        case 18:
-            mainGenre = "DRAMA";
-            break;
-        case 0:
-            mainGenre = "RANDOM";
-            break;
-        default:
-            break;
-    }
-    return mainGenre;
-}
-
-function getExtraExplanationForGenre(genre) {
-    let explanation = "";
-    switch (genre) {
-        case 35:
-            explanation = "Suggested <strong>COMEDY</strong> due to a lack of recommendations for this genre based on your three preferred movies";
-            break;
-        case 27:
-            explanation = "Suggested <strong>HORROR</strong> due to a lack of recommendations for this genre based on your three preferred movies";
-            break;
-        case 10749:
-            explanation = "Suggested <strong>ROMANCE</strong> due to a lack of recommendations for this genre based on your three preferred movies";
-            break;
-        case 12:
-            explanation = "Suggested <strong>ADVENTURE</strong> due to a lack of recommendations for this genre based on your three preferred movies";
-            break;
-        case 18:
-            explanation = "Suggested <strong>DRAMA</strong> due to a lack of  recommendations based on your three preferred movies";
-            break;
-        default:
-            break;
-    }
-    return explanation;
-}
-
-function getExtraExplanationForRandom(genre) {
-    let explanation = "";
-    switch (genre) {
-        case 35:
-            explanation = "Suggested <strong>RANDOMLY</strong> due to a lack of <strong>COMEDY</strong> recommendations based on your three preferred movies";
-            break;
-        case 27:
-            explanation = "Suggested <strong>RANDOMLY</strong> due to a lack of <strong>HORROR</strong> recommendations based on your three preferred movies";
-            break;
-        case 10749:
-            explanation = "Suggested <strong>RANDOMLY</strong> due to a lack of <strong>ROMANCE</strong> recommendations based on your three preferred movies";
-            break;
-        case 12:
-            explanation = "Suggested <strong>RANDOMLY</strong> due to a lack of <strong>ADVENTURE</strong> recommendations based on your three preferred movies";
-            break;
-        case 18:
-            explanation = "Suggested <strong>RANDOMLY</strong> due to a lack of <strong>DRAMA</strong> recommendations based on your three preferred movies";
-            break;
-        case 0:
-            explanation = "Suggested <strong>randomly</strong>";
-            break;
-        default:
-            break;
-    }
-    return explanation;
 }
 
 function setFinalListOfRecommendedMovies(list) {
@@ -360,11 +350,9 @@ function displayRecommendedMovies(movies) {
 
 function displayMovie(movie, number){ //Shows the movie details in the Dom
     let moviePosterPath = movie.poster_path;
-    //let movieTitle = movie.title;
     let genres = movie.genre_ids;
     let movieDescription = movie.overview;
     let movieAverage = movie.vote_average;
-    //let isRandom = movie.isARandomMovie;
     let movieExplanation = movie.movieExplanation;
     let movieMainGenre = movie.mainGenre;
     let movieHTMLOutput = "";
@@ -509,36 +497,6 @@ function showMovieDescription(number) {
     }
 }
 
-function orderByComplementary(movie1,movie2){
-    if (movie2.mainGenre.includes('Recommended')||movie1.mainGenre.includes('Suggested')){
-        return 1;
-    }
-    if (movie1.mainGenre.includes('Recommended')||movie2.mainGenre.includes('Suggested')){
-        return -1;
-    }
-    return 0;
-}
-
-function orderByRating(movie1,movie2){
-    if (movie2.vote_average<movie1.vote_average){
-        return 1;
-    }
-    if(movie2.vote_average>=movie1.vote_average){
-        return -1;
-    }
-    return 0;
-}
-
-function orderByRatingRandom(movie1,movie2){
-    if (movie1.vote_average<movie2.vote_average){
-        return 1;
-    }
-    if(movie1.vote_average>=movie2.vote_average){
-        return -1;
-    }
-    return 0;
-}
-
 function getMovieGenres(genres) {
     let genresList="";
     let lastElement = false;
@@ -569,87 +527,6 @@ function setSelectedMovie(number) {
         currentSelectedMovieElement = $("#movie"+currentSelectedMovieId.toString());
         currentSelectedMovieElement.removeClass("notSelected");
     }
-}
-
-function setTMDBgenres() {
-    TMDBgenres = [
-        {
-            "id": 28,
-            "name": "Action"
-        },
-        {
-            "id": 12,
-            "name": "Adventure"
-        },
-        {
-            "id": 16,
-            "name": "Animation"
-        },
-        {
-            "id": 35,
-            "name": "Comedy"
-        },
-        {
-            "id": 80,
-            "name": "Crime"
-        },
-        {
-            "id": 99,
-            "name": "Documentary"
-        },
-        {
-            "id": 18,
-            "name": "Drama"
-        },
-        {
-            "id": 10751,
-            "name": "Family"
-        },
-        {
-            "id": 14,
-            "name": "Fantasy"
-        },
-        {
-            "id": 36,
-            "name": "History"
-        },
-        {
-            "id": 27,
-            "name": "Horror"
-        },
-        {
-            "id": 10402,
-            "name": "Music"
-        },
-        {
-            "id": 9648,
-            "name": "Mystery"
-        },
-        {
-            "id": 10749,
-            "name": "Romance"
-        },
-        {
-            "id": 878,
-            "name": "Science Fiction"
-        },
-        {
-            "id": 10770,
-            "name": "TV Movie"
-        },
-        {
-            "id": 53,
-            "name": "Thriller"
-        },
-        {
-            "id": 10752,
-            "name": "War"
-        },
-        {
-            "id": 37,
-            "name": "Western"
-        }
-    ];
 }
 
 function getRecommendedMoviesBasedOnMovie(movieId, page, callback) {
