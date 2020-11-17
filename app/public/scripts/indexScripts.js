@@ -659,3 +659,16 @@ function scrolling(component,side,speed,distance,quantity){
         }
     }, speed);
 }
+
+function createRandomRecommendations() { //called when shaking
+    let listof20RecommendedMovies = [];
+    fillRandomRecommendations(listof20RecommendedMovies);
+    listof20RecommendedMovies.sort(orderByRating);
+    setFinalListOfRecommendedMovies(listof20RecommendedMovies);
+    setGenresAmountForSliders();
+    displayRecommendedMovies(finalListOfRecommendedMovies);
+}
+
+function dislike() { //called when dislike happens
+
+}

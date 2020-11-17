@@ -1,0 +1,26 @@
+{
+  "name": "movierecsyssecondversion",
+  "version": "2.0.0",
+  "description": "The second version of a Movie Recommendation System for a Tangible User Interface",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osalro/MovieRecSysV2.git"
+  },
+  "author": "Oscar Alvarado",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/osalro/MovieRecSysV2/issues"
+  },
+  "homepage": "https://github.com/osalro/MovieRecSysV2#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "serialport": "^9.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
