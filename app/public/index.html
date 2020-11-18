@@ -94,18 +94,13 @@
         </div>
     </div>
 </div>
-<div id="controlsPanel" class="container">
+<div id="controlsPanel" class="mt-4 border border-light rounded-lg container">
     <div class="row mt-2">
         <div class="col-sm-12">
-            <header>
-                <h5 class="animated fadeIn py-sm-1 text-light">
-                    Select your <span class="font-weight-bold">Emotion</span> preference. The more you increase one of them, more movies from that mood you will get!
-                </h5>
-            </header>
+            <h5 class="animated fadeIn py-sm-1 text-light text-center">
+                Select your <span class="font-weight-bold">Emotion</span> preference. The more you increase one of them, more movies from that mood you will get!
+            </h5>
         </div>
-    </div>
-    <div class="row mt-2 justify-content-center">
-        <div class="small text-light font-weight-lighter" id="randomShownAmount"></div>
     </div>
     <div class="row mt-2 justify-content-center">
         <div class="col-sm-2 text-center mr-3">
@@ -138,7 +133,7 @@
         <div class="col-sm-2 text-center ml-3">
             <h5 class="text-light">
                 <i class="far fa-sad-cry fa-lg mr-1 text-light"></i>
-                Grief
+                Pensive
             </h5>
             <div class="small text-light font-weight-lighter" id="dramasShownAmount"></div>
             <input type="range" class="custom-range" min="0" max="100" step="25" id="sliderDrama">
@@ -154,6 +149,11 @@
             <span class="text-light" id="valueAdventure"></span>
         </div>
     </div>
+    <div class="row mt-2 mb-2 justify-content-center">
+        <div class="text-light font-weight-lighter" id="randomShownAmount"></div>
+    </div>
+</div>
+<div class="container">
     <div class="row my-2 align-items-center">
         <div class="col-sm-12">
             <footer>

@@ -182,17 +182,16 @@ function createRecommendations() {
         fillRandomRecommendations(listof20RecommendedMovies);
     }
     else{
-        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountJoy,"Joy");
-        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountScariness,"Scariness");
-        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountLoving,"Loving");
-        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountPensive,"Pensive");
-        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountAmusement,"Amusement");
-        if (listof20RecommendedMovies<20){
-            fillRandomRecommendations(listof20RecommendedMovies);
+        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountJoy,"JOY");
+        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountScariness,"SCARINESS");
+        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountLoving,"LOVING");
+        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountPensive,"PENSIVE");
+        obtainMoviesByGenderFromTheListOfMovies(listof20RecommendedMovies,amountAmusement,"AMUSEMENT");
+        if (listof20RecommendedMovies.length<20){
+            fillRandomRecommendationsToAchieve20(listof20RecommendedMovies);
         }
     }
     listof20RecommendedMovies.sort(orderByRating);
-    listof20RecommendedMovies.sort(orderByComplementary);
     setFinalListOfRecommendedMovies(listof20RecommendedMovies);
     setGenresAmountForSliders();
     displayRecommendedMovies(finalListOfRecommendedMovies);
@@ -229,7 +228,7 @@ function obtainMoviesByGenderFromTheListOfMovies(list,number,genre) {
     if (number>0){
         for (let i=0;i<movieListRecSys.length;i++){
             if ((movieListRecSys[i].genre_ids.some(id=>genresList.includes(id)))&&(number>0)&&(!list.includes(movieListRecSys[i]))){
-                movieListRecSys[i].mainGenre = genre.toUpperCase();
+                movieListRecSys[i].mainGenre = genre;
                 list.push(movieListRecSys[i]);
                 number--;
             }
@@ -242,8 +241,8 @@ function obtainMoviesByGenderFromTheListOfMovies(list,number,genre) {
             let randomMovie = movieListRecSys[randomNumber];
             if (!list.includes(randomMovie)){
                 randomMovie.mainGenre = "RANDOM";
-                randomMovie.movieExplanation = "Recommended due to a lack of movies for " + genre.toUpperCase();
-                listOfMovies.push(randomMovie);
+                randomMovie.movieExplanation = "Recommended ramdonly due to a lack of movies for " + genre + " in your personalized recommendations";
+                list.push(randomMovie);
                 number--;
             }
         }
@@ -253,19 +252,19 @@ function obtainMoviesByGenderFromTheListOfMovies(list,number,genre) {
 function obtainNeededGenres(genre) {
     let listOfNeededGenres = [];
     switch (genre) {
-        case "Joy":
+        case "JOY":
             listOfNeededGenres = [16,35,10751,14,10402];
             break;
-        case "Scariness":
+        case "SCARINESS":
             listOfNeededGenres = [80,27,9648,53];
             break;
-        case "Loving":
+        case "LOVING":
             listOfNeededGenres = [10749];
             break;
-        case "Pensive":
+        case "PENSIVE":
             listOfNeededGenres = [99,18,36];
             break;
-        case "Amusement":
+        case "AMUSEMENT":
             listOfNeededGenres = [28,12,878,10752,37];
             break;
     }
@@ -283,22 +282,24 @@ function fillRandomRecommendations(listOfMovies) {
     }
 }
 
-function orderByRating(movie1,movie2){
-    if (movie2.vote_average<movie1.vote_average){
-        return 1;
+function fillRandomRecommendationsToAchieve20(listOfMovies) {
+    while (listOfMovies.length<20){
+        let randomNumber = Math.floor(Math.random() * movieListRecSys.length);
+        let randomMovie = movieListRecSys[randomNumber];
+        if (!listOfMovies.includes(randomMovie)){
+            randomMovie.mainGenre = "RANDOM";
+            randomMovie.movieExplanation = "Recommended randomly to fulfill 20 movies in total";
+            listOfMovies.push(randomMovie);
+        }
     }
-    if(movie2.vote_average>=movie1.vote_average){
-        return -1;
-    }
-    return 0;
 }
 
-function orderByComplementary(movie1,movie2){
-    if (movie1.mainGenre.includes('RANDOM')){
-        return 1;
-    }
-    if (movie2.mainGenre.includes('RANDOM')){
+function orderByRating(movie1,movie2){
+    if (movie2.vote_average<movie1.vote_average){
         return -1;
+    }
+    if(movie2.vote_average>=movie1.vote_average){
+        return 1;
     }
     return 0;
 }
@@ -306,31 +307,31 @@ function orderByComplementary(movie1,movie2){
 function setGenresAmountForSliders() {
     let amountComedies = 0, amountHorrors = 0, amountRomances = 0, amountDramas = 0, amountAdventures = 0, amountRandom = 0;
     for (let i=0;i<finalListOfRecommendedMovies.length;i++){
-        if (finalListOfRecommendedMovies[i].mainGenre.includes('JOY')){
+        if (finalListOfRecommendedMovies[i].mainGenre === "JOY"){
             amountComedies++;
         }
-        if (finalListOfRecommendedMovies[i].mainGenre.includes('SCARINESS')){
+        if (finalListOfRecommendedMovies[i].mainGenre === "SCARINESS"){
             amountHorrors++;
         }
-        if (finalListOfRecommendedMovies[i].mainGenre.includes('LOVING')){
+        if (finalListOfRecommendedMovies[i].mainGenre === "LOVING"){
             amountRomances++;
         }
-        if (finalListOfRecommendedMovies[i].mainGenre.includes('PENSIVE')){
+        if (finalListOfRecommendedMovies[i].mainGenre === "PENSIVE"){
             amountDramas++;
         }
-        if (finalListOfRecommendedMovies[i].mainGenre.includes('AMUSEMENT')){
+        if (finalListOfRecommendedMovies[i].mainGenre === "AMUSEMENT"){
             amountAdventures++;
         }
-        if (finalListOfRecommendedMovies[i].mainGenre.includes('RANDOM')){
-            amountAdventures++;
+        if (finalListOfRecommendedMovies[i].mainGenre === "RANDOM"){
+            amountRandom++;
         }
     }
-    document.getElementById("randomShownAmount").innerHTML = "Showing: <strong>" + amountRandom +"</strong> RANDOM movies";
-    document.getElementById("comediesShownAmount").innerHTML = "Showing: <strong>" + amountComedies +"</strong> movies";
-    document.getElementById("horrorsShownAmount").innerHTML = "Showing: <strong>" + amountHorrors +"</strong> movies";
-    document.getElementById("romancesShownAmount").innerHTML = "Showing: <strong>" + amountRomances +"</strong> movies";
-    document.getElementById("dramasShownAmount").innerHTML = "Showing: <strong>" + amountDramas +"</strong> movies";
-    document.getElementById("adventuresShownAmount").innerHTML = "Showing: <strong>" + amountAdventures +"</strong> movies";
+    document.getElementById("randomShownAmount").innerHTML = "Showing <strong>" + amountRandom +"</strong> RANDOM movies in the current list";
+    document.getElementById("comediesShownAmount").innerHTML = "<strong>" + amountComedies +"</strong> movies";
+    document.getElementById("horrorsShownAmount").innerHTML = "<strong>" + amountHorrors +"</strong> movies";
+    document.getElementById("romancesShownAmount").innerHTML = "<strong>" + amountRomances +"</strong> movies";
+    document.getElementById("dramasShownAmount").innerHTML = "<strong>" + amountDramas +"</strong> movies";
+    document.getElementById("adventuresShownAmount").innerHTML = "<strong>" + amountAdventures +"</strong> movies";
 }
 
 function setFinalListOfRecommendedMovies(list) {
@@ -351,7 +352,13 @@ function displayRecommendedMovies(movies) {
 function displayMovie(movie, number){ //Shows the movie details in the Dom
     let moviePosterPath = movie.poster_path;
     let genres = movie.genre_ids;
-    let movieDescription = movie.overview;
+    let movieDescription = "";
+    if (movie.overview.length>300){
+        movieDescription = movie.overview.substring(0,295) + "..."
+    }
+    else {
+        movieDescription = movie.overview;
+    }
     let movieAverage = movie.vote_average;
     let movieExplanation = movie.movieExplanation;
     let movieMainGenre = movie.mainGenre;
@@ -363,23 +370,23 @@ function displayMovie(movie, number){ //Shows the movie details in the Dom
     "<!-- Card image -->" +
     "<div class='view view-cascade justify-content-center posterMoviesContainer'>" +
     "<img src='" + posterbaseURL + moviePosterPath + "' class='card-img-top posterMovies' alt='movie poster'>" +
+        "<div id='disLikeMask"+ number +"' class='mask flex-center rgba-black-strong invisible'>" +
+            "<i id='thumbs' class='fas fa-thumbs-down fa-5x text-light align-middle'></i>" +
+        "</div>" +
     "</div>" +
     "<!-- Card content -->" +
     "<div id='cardBody"+ number +"' class='card-body card-body-cascade text-center cardContent align-items-center'>" +
     "<!-- Title -->" +
     "<h5 class='card-subtitle'>" +
     "<strong>" + movieMainGenre + "</strong>" +
-    "<a id='movieExplanationButton("+ number +")' class='ml-2 p-0 btn btn-white rounded-circle explanationButton' role='button' onclick='showMovieExplanation("+ number +")'>" +
+    "<a id='movieExplanationButton("+ number +")' class='ml-2 p-0 btn btn-white rounded-circle explanationButton' role='button' onclick='showMovieExplanation()'>" +
     "<i class='far fa-2x fa-question-circle text-dark'></i>" +
     "</a>" +
     "</h5>"+
     "<!-- Text -->" +
     "<p id='movieExplanation"+ number +"' class='font-italic small font-weight-lighter mb-3 animated fadeIn'>" + movieExplanation + "</p>" +
     "<div class='card-text font-weight-bold text-center'>" + getMovieGenres(genres) + "</div>" +
-    "<a id='movieDescriptionButton"+ number +"' class='btn btn-light text-black-50 explanationButton' role='button' onclick='showMovieDescription("+ number +")'>" +
-    "Show movie description" +
-    "</a>" +
-    "<div id='movieDescription"+ number +"' class='small font-weight-lighter text-justify animated fadeIn'>" + movieDescription + "</div>" +
+    "<div id='movieDescription"+ number +"' class='mt-2 small font-weight-lighter text-justify animated fadeIn'>" + movieDescription + "</div>" +
     "</div>" +
     "<!-- Card footer -->" +
     "<div class='card-footer text-muted text-center'>" +
@@ -391,7 +398,6 @@ function displayMovie(movie, number){ //Shows the movie details in the Dom
     "</div>";
     $("#listOfMovies").append(movieHTMLOutput);
     $('#movieExplanation'+number.toString()).hide();
-    $('#movieDescription'+number.toString()).hide();
 }
 
 function appendBlackCard() {
@@ -455,45 +461,6 @@ function showRecSysExplanation(){
     }
     else{
         controlsPanelElement.addClass("backgroundForExplanation")
-    }
-}
-
-function showMovieExplanation(number) {
-    let movieExplanationElement = $('#movieExplanation'+number.toString());
-    let cardElement = $('#card'+number.toString());
-    let nextCardElement = $('#card'+(number+1).toString());
-    if (number>1){
-        nextCardElement = $('#card'+(number-1).toString());
-    }
-    if (movieExplanationElement.is(":hidden")){
-        cardElement.css("height","auto");
-        movieExplanationElement.show();
-    }
-    else
-    {
-        cardElement.css("height",nextCardElement.css("height"));
-        movieExplanationElement.hide();
-    }
-}
-
-function showMovieDescription(number) {
-    let movieDescriptionElement = $('#movieDescription'+number.toString());
-    let movieDescriptionButton = $('#movieDescriptionButton'+number.toString());
-    let cardElement = $('#card'+number.toString());
-    let nextCardElement = $('#card'+(number+1).toString());
-    if (number>1){
-        let nextCardElement = $('#card'+(number-1).toString());
-    }
-    if (movieDescriptionElement.is(":hidden")){
-        cardElement.css("height","auto");
-        movieDescriptionElement.show();
-        movieDescriptionButton.html("Hide movie description");
-    }
-    else
-    {
-        cardElement.css("height",nextCardElement.css("height"));
-        movieDescriptionElement.hide();
-        movieDescriptionButton.html("Show movie description");
     }
 }
 
@@ -670,5 +637,30 @@ function createRandomRecommendations() { //called when shaking
 }
 
 function dislike() { //called when dislike happens
+    let movieDislikeMaskElement = $('#disLikeMask'+currentSelectedMovieId.toString());
+    if (movieDislikeMaskElement.hasClass( "invisible" )){
+        movieDislikeMaskElement.removeClass( "invisible" );
+    }
+    else{
+        movieDislikeMaskElement.addClass( "invisible" );
+    }
+}
 
+function showMovieExplanation() {
+    let number = currentSelectedMovieId;
+    let movieExplanationElement = $('#movieExplanation'+number.toString());
+    let cardElement = $('#card'+number.toString());
+    let nextCardElement = $('#card'+(number+1).toString());
+    if (number>1){
+        nextCardElement = $('#card'+(number-1).toString());
+    }
+    if (movieExplanationElement.is(":hidden")){
+        cardElement.css("height","auto");
+        movieExplanationElement.show();
+    }
+    else
+    {
+        cardElement.css("height",nextCardElement.css("height"));
+        movieExplanationElement.hide();
+    }
 }
