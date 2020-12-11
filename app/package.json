@@ -4,7 +4,8 @@
   "description": "The second version of a Movie Recommendation System for a Tangible User Interface",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,8 @@
   "homepage": "https://github.com/osalro/MovieRecSysV2#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "serialport": "^9.0.2"
+    "serialport": "^9.0.2",
+    "socket.io": "^3.0.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"

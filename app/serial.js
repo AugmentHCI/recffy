@@ -1,5 +1,9 @@
 const SerialPort = require('serialport');// include the library
 
+
+const Readline = SerialPort.parsers.Readline; // make instance of Readline parser
+const parser = new Readline(); // make a new parser to read ASCII lines
+
 function showSerialPorts(){// list serial ports:
     console.log("Current ports available:");
     SerialPort.list().then(ports => {
@@ -11,13 +15,10 @@ function showSerialPorts(){// list serial ports:
     });
 }
 
-function initializePort(){ //starts the connection with the serial port
+function initializePort(io){ //starts the connection with the serial port
     let portName = "COM3"; //change for the needed port
     let myPort = new SerialPort(portName, 9600); //open the port using new()
-
     //for reading every break line \n comming from the serial port, generates a data event every \n
-    let Readline = SerialPort.parsers.Readline; // make instance of Readline parser
-    let parser = new Readline(); // make a new parser to read ASCII lines
     myPort.pipe(parser); // pipe the serial stream to the parser
 
     //assign methods to the port
@@ -32,7 +33,10 @@ function initializePort(){ //starts the connection with the serial port
     }
 
     function readSerialData(data) {
-        console.log(data);
+        console.log(data.toString());
+        io.emit("message",{
+            value:data.toString()
+        });
     }
 
     function showPortClose() {
@@ -40,7 +44,7 @@ function initializePort(){ //starts the connection with the serial port
     }
 
     function showError(error) {
-        console.log('Serial port error: ' + error);
+        console.log('Serial port error: ' + error.message);
     }
 
 }
