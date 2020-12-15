@@ -646,7 +646,7 @@ function dislike() { //called when dislike happens
     }
 }
 
-function showMovieExplanation() {
+function showMovieExplanation() { //called when explanation happens
     let number = currentSelectedMovieId;
     let movieExplanationElement = $('#movieExplanation'+number.toString());
     let cardElement = $('#card'+number.toString());
@@ -663,4 +663,12 @@ function showMovieExplanation() {
         cardElement.css("height",nextCardElement.css("height"));
         movieExplanationElement.hide();
     }
+}
+
+function showStandByMessage() {
+    //standByMessage
+}
+
+function playMovie() {
+    //play
 }

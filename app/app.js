@@ -24,7 +24,7 @@ wss.on('connection', function connection(ws) {
 
     mySerial.on('data', function (data) {
         let message = data.toString();
-        console.log("Receiving from SerialPort" + message);
+        console.log("Receiving from SerialPort: " + message);
         ws.send(message);
     });
 
