@@ -440,30 +440,6 @@ function appendBlackCard() {
     $("#listOfMovies").append(html);
 }
 
-function showRecSysExplanation(){
-    let recSysExplanationElement = $("#recSysExplanation");
-    let moviesPanelElement = $("#moviesPanel");
-    let controlsPanelElement = $("#controlsPanel");
-    if(recSysExplanationElement.hasClass("invisible")){
-        recSysExplanationElement.removeClass("invisible")
-    }
-    else{
-        recSysExplanationElement.addClass("invisible")
-    }
-    if(moviesPanelElement.hasClass("backgroundForExplanation")){
-        moviesPanelElement.removeClass("backgroundForExplanation")
-    }
-    else{
-        moviesPanelElement.addClass("backgroundForExplanation")
-    }
-    if(controlsPanelElement.hasClass("backgroundForExplanation")){
-        controlsPanelElement.removeClass("backgroundForExplanation")
-    }
-    else{
-        controlsPanelElement.addClass("backgroundForExplanation")
-    }
-}
-
 function getMovieGenres(genres) {
     let genresList="";
     let lastElement = false;
@@ -666,9 +642,48 @@ function showMovieExplanation() { //called when explanation happens
 }
 
 function showStandByMessage() {
-    //standByMessage
+    let standbyElement = $("#standByMessage");
+    let moviesPanelElement = $("#moviesPanel");
+    let controlsPanelElement = $("#controlsPanel");
+    standbyElement.removeClass("invisible");
+    moviesPanelElement.addClass("backgroundForExplanation");
+    controlsPanelElement.addClass("backgroundForExplanation");
+}
+
+function hideStandByMessage() {
+    let standbyElement = $("#standByMessage");
+    let moviesPanelElement = $("#moviesPanel");
+    let controlsPanelElement = $("#controlsPanel");
+    standbyElement.addClass("invisible");
+    moviesPanelElement.removeClass("backgroundForExplanation");
+    controlsPanelElement.removeClass("backgroundForExplanation");
 }
 
 function playMovie() {
-    //play
+    let currentMovieName = finalListOfRecommendedMovies[currentSelectedMovieId].title;
+    let movieBeingPlayedElement = $("#movieBeingPlayed");
+    let playMovieElement = $("#playMovie");
+    let moviesPanelElement = $("#moviesPanel");
+    let controlsPanelElement = $("#controlsPanel");
+
+    if(playMovieElement.hasClass("invisible")){
+        playMovieElement.removeClass("invisible");
+        movieBeingPlayedElement.html(currentMovieName);
+    }
+    else{
+        playMovieElement.addClass("invisible");
+        movieBeingPlayedElement.html("");
+    }
+    if(moviesPanelElement.hasClass("backgroundForExplanation")){
+        moviesPanelElement.removeClass("backgroundForExplanation")
+    }
+    else{
+        moviesPanelElement.addClass("backgroundForExplanation")
+    }
+    if(controlsPanelElement.hasClass("backgroundForExplanation")){
+        controlsPanelElement.removeClass("backgroundForExplanation")
+    }
+    else{
+        controlsPanelElement.addClass("backgroundForExplanation")
+    }
 }

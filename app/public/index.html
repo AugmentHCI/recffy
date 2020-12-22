@@ -25,56 +25,33 @@
             <header>
                 <h2 class="animated fadeIn py-sm-1 text-light text-center border border-light rounded-lg">
                     Welcome to your Personalized Movie Recommendation System
-                    <a id='recsysExplanationButton' role='button' onclick='showRecSysExplanation()'>
-                        <i class='far fa-question-circle fa-sm text-light csButton'></i>
-                    </a>
                 </h2>
             </header>
         </div>
     </div>
     <div class="row justify-content-center">
-        <div id="recSysExplanation" class="col-sm-12 m-2 elegant-color-dark recSysExplanation invisible animated fadeIn">
-        <h3 class="animated fadeIn py-sm-1 text-light text-center font-weight-bold">
-                This is a general explanation for this Personalized Movie Recommendation System:
-        </h3>
-        <p class="text-light text-justify animated fadeIn py-sm-1">
-            <span class="font-weight-bold">TMDB API serves all movie recommendations</span> in this system. They
-            seem to base their recommendations mostly on <span class="font-weight-bold">the behavior of their community</span> such
-            as similar rating and watching behaviors, among others.
-            <span class="font-weight-bold">TMDB also defines which genres belong to an specific movie.</span>
-        </p>
-        <p class="text-light text-justify animated fadeIn py-sm-1">
-            We are using their service to filter out these recommendations by movie GENRES as following:
-            <ol class="text-light">
-                <li class="mb-2">
-                    Based on 2 movies: "Parasite"(2020) and "The Shape Of Water"(2018), as your hypothetical
-                    personalized movie preference profile, we show a list of <span class="font-weight-bold"> recommendations according
-                    to TMDB API recommendations</span>
-                </li>
-                <li class="mb-2">
-                    Additionally, you can control these recommendations by choosing different levels of five movie emotions.
-                    Each movie emotion is mapped with a set of corresponding movie genres: (1)~Joy is mapped with genres as: Comedy,
-                    Animation, Family, and Musical; (2)~Scariness with: Horror, Mystery, and Thriller; (3)Loving: Romance, and
-                    Documentary; (4)~Grief: Drama; and (5)~Amusement: Adventure, Action, Crime, Science Fiction, War, and Western.
-                    The amount of preference that you choose for each emotion <span class="font-weight-bold">will determine
-                    the amount of movie recommendations that you will get in your recommendations</span>. For example, the more
-                    Joy you prefer in comparison with other genres, the more comedies, animations, family, and musical movies will
-                    appear for the list of recommendations
-                </li>
-                <li class="mb-2">
-                    If you prefer random recommendations based on these 2 movies, <span class="font-weight-bold">
-                    "shake" the interface to reduce all emotion preferences to 0(zero).</span> In this case, the recommendations are
-                    going to be presented randomly without considering any emotion or movie genres.
-                </li>
-                <li class="mb-2">
-                    Feel free to check the "?" mark in every movie, there is a <span class="font-weight-bold">specific explanation
-                    to know why it has been recommended </span> At the bottom of every movie, you will also find a
-                    <span class="font-weight-bold">TMDB rating for that movie according to their community's voting</span>. All
-                    shown movies will be ordered based on this rating from left to right, showing first the highest movies.
-                </li>
-            </ol>
-        </p>
+        <div id="standByMessage" class="col-sm-12 m-2 elegant-color-dark recSysExplanation invisible animated fadeIn">
+            <br><br><br><br><br>
+            <h3 class="animated fadeIn py-sm-1 text-light text-center font-weight-bold">
+                Recffy is in Stand-By Mode
+            </h3>
+            <br><br>
+            <p class="text-light text-justify animated fadeIn py-sm-1">
+                Recffy has a "stand-by mode" to avoid possible mistakes when you use it as a pillow. <br><br>
+                Please, <span class="font-weight-bold">make a long press on the button </span> behind Recffy
+                to turn off his stand-by mode and start using it to control your movie recommendations
+            </p>
+        </div>
     </div>
+    <div class="row justify-content-center">
+        <div id="playMovie" class="col-sm-12 m-2 elegant-color-dark recSysExplanation invisible animated fadeIn">
+            <h3 class="animated fadeIn py-sm-1 text-light text-center">
+                Currently playing  <span id="movieBeingPlayed" class="font-weight-bold"></span>
+            </h3>
+            <div class="text-center">
+                <img src="sources/movieentry.jpg" class="img-fluid" width="720">
+            </div>
+        </div>
     </div>
 </div>
 

@@ -33,6 +33,7 @@ ws.addEventListener('close', function () {
 
 function handleMessage(message) {
     if (message!=="rd_standby"){
+        hideStandByMessage(); //agregar case del mensaje que llega
         switch (message) {
             case "dislike":
                 dislike();
