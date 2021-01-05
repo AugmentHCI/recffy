@@ -609,6 +609,16 @@ function createRandomRecommendations() { //called when shaking
     listof20RecommendedMovies.sort(orderByRating);
     setFinalListOfRecommendedMovies(listof20RecommendedMovies);
     setGenresAmountForSliders();
+    $sliderComedies.val(0);
+    $sliderHorror.val(0);
+    $sliderRomance.val(0);
+    $sliderDrama.val(0);
+    $sliderAdventure.val(0);
+    document.getElementById("valueComedies").innerHTML="0%";
+    document.getElementById("valueHorror").innerHTML="0%";
+    document.getElementById("valueRomance").innerHTML="0%";
+    document.getElementById("valueDrama").innerHTML="0%";
+    document.getElementById("valueAdventure").innerHTML="0%";
     displayRecommendedMovies(finalListOfRecommendedMovies);
 }
 

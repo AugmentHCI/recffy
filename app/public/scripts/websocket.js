@@ -46,7 +46,7 @@ function handleMessage(message) {
                 dislike();
                 break;
             case "shake":
-                createRandomRecommendations()
+                createRandomRecommendations();
                 break;
             case "turn_left":
                 buttonLeft.onclick();
