@@ -5,22 +5,21 @@ const sliderHorror = document.getElementById("sliderHorror");
 const sliderRomance = document.getElementById("sliderRomance");
 
 let valueComedies = document.getElementById("valueComedies");
-let valueAdventures = document.getElementById("valueHorror");
-let valueDramas = document.getElementById("valueRomance");
-let valueHorrors = document.getElementById("valueDrama");
-let valueRomances = document.getElementById("valueAdventure");
+let valueHorrors = document.getElementById("valueHorror");
+let valueRomances = document.getElementById("valueRomance");
+let valueDramas = document.getElementById("valueDrama");
+let valueAdventures = document.getElementById("valueAdventure");
 
 const ws = new WebSocket('ws://localhost:8080');
 
 // Connection opened
 ws.addEventListener('open', function (event) {
-    //ws.send('Hello Server!');
     console.log("Web socket connection for Server");
 });
 
 // Listen for messages
 ws.addEventListener('message', function (event) {
-    console.log('Message received from server: ', event.data);
+    handleMessage(event.data);
 });
 
 ws.addEventListener('error', function (error) {
@@ -32,9 +31,17 @@ ws.addEventListener('close', function () {
 });
 
 function handleMessage(message) {
-    if (message!=="rd_standby"){
-        hideStandByMessage(); //agregar case del mensaje que llega
+    message = message.replace(/(\r\n|\n|\r)/gm, "");
+    console.log('Message received from server: ', message);
+    if (message!==""){
+        let aux = 0;
         switch (message) {
+            case "rd_standby":
+                showStandByMessage();
+                break;
+            case "rd_active":
+                hideStandByMessage();
+                break;
             case "dislike":
                 dislike();
                 break;
@@ -48,72 +55,102 @@ function handleMessage(message) {
                 buttonRight.onclick();
                 break;
             case "increase_comedy":
-                if (sliderComedies.val()!==100){
-                    sliderComedies.val+=25;
-                    valueComedies.html(sliderComedies.val()+"%");
+                if (sliderComedies.value!=="100"){
+                    aux = parseInt(sliderComedies.value);
+                    aux += 25;
+                    sliderComedies.value=aux.toString();
+                    valueComedies.innerHTML = "";
+                    valueComedies.innerHTML = sliderComedies.value + "%";
                     setTimeout(createRecommendations(),2000);
                 }
                 break;
             case "decrease_comedy":
-                if (sliderComedies.val()!==0){
-                    sliderComedies.val-=25;
-                    valueComedies.html(sliderComedies.val()+"%");
+                if (sliderComedies.value!=="0"){
+                    aux = parseInt(sliderComedies.value);
+                    aux -= 25;
+                    sliderComedies.value=aux.toString();
+                    valueComedies.innerHTML = "";
+                    valueComedies.innerHTML = sliderComedies.value + "%";
                     setTimeout(createRecommendations(),2000);
                 }
                 break;
             case "increase_horror":
-                if (sliderHorror.val()!==100){
-                    sliderHorror.val+=25;
-                    valueHorrors.html(sliderHorror.val()+"%");
+                if (sliderHorror.value!=="100"){
+                    aux = parseInt(sliderHorror.value);
+                    aux += 25;
+                    sliderHorror.value=aux.toString();
+                    valueHorrors.innerHTML = "";
+                    valueHorrors.innerHTML = sliderHorror.value + "%";
                     setTimeout(createRecommendations(),2000);
                 }
                 break;
             case "decrease_horror":
-                if (sliderHorror.val()!==0){
-                    sliderHorror.val-=25;
-                    valueHorrors.html(sliderHorror.val()+"%");
+                if (sliderHorror.value!=="0"){
+                    aux = parseInt(sliderHorror.value);
+                    aux -= 25;
+                    sliderHorror.value=aux.toString();
+                    valueHorrors.innerHTML = "";
+                    valueHorrors.innerHTML = sliderHorror.value + "%";
                     setTimeout(createRecommendations(),2000);
                 }
                 break;
             case "increase_romance":
-                if (sliderRomance.val()!==100){
-                    sliderRomance.val+=25;
-                    valueRomances.html(sliderRomance.val()+"%");
+                if (sliderRomance.value!=="100"){
+                    aux = parseInt(sliderRomance.value);
+                    aux += 25;
+                    sliderRomance.value=aux.toString();
+                    valueRomances.innerHTML = "";
+                    valueRomances.innerHTML = sliderRomance.value + "%";
                     setTimeout(createRecommendations(),2000);
                 }
                 break;
             case "decrease_romance":
-                if (sliderRomance.val()!==0){
-                    sliderRomance.val-=25;
-                    valueRomances.html(sliderRomance.val()+"%");
+                if (sliderRomance.value!=="0"){
+                    aux = parseInt(sliderRomance.value);
+                    aux -= 25;
+                    sliderRomance.value=aux.toString();
+                    valueRomances.innerHTML = "";
+                    valueRomances.innerHTML = sliderRomance.value + "%";
                     setTimeout(createRecommendations(),2000);
                 }
                 break;
             case "decrease_drama":
-                if (sliderDrama.val()!==0){
-                    sliderDrama.val-=25;
-                    valueDramas.html(sliderDrama.val()+"%");
+                if (sliderDrama.value!=="0"){
+                    aux = parseInt(sliderDrama.value);
+                    aux -= 25;
+                    sliderDrama.value=aux.toString();
+                    valueDramas.innerHTML = "";
+                    valueDramas.innerHTML = sliderDrama.value + "%";
                     setTimeout(createRecommendations(),2000);
                 }
                 break;
             case "increase_drama":
-                if (sliderDrama.val()!==100){
-                    sliderDrama.val+=25;
-                    valueDramas.html(sliderDrama.val()+"%");
+                if (sliderDrama.value!=="100"){
+                    aux = parseInt(sliderDrama.value);
+                    aux += 25;
+                    sliderDrama.value=aux.toString();
+                    valueDramas.innerHTML = "";
+                    valueDramas.innerHTML = sliderDrama.value + "%";
                     setTimeout(createRecommendations(),2000);
                 }
                 break;
             case "increase_adventure":
-                if (sliderAdventure.val()!==100){
-                    sliderAdventure.val+=25;
-                    valueDramas.html(sliderAdventure.val()+"%");
+                if (sliderAdventure.value!=="100"){
+                    aux = parseInt(sliderAdventure.value);
+                    aux += 25;
+                    sliderAdventure.value=aux.toString();
+                    valueAdventures.innerHTML = "";
+                    valueAdventures.innerHTML = sliderAdventure.value + "%";
                     setTimeout(createRecommendations(),2000);
                 }
                 break;
             case "decrease_adventure":
-                if (sliderAdventure.val()!==0){
-                    sliderAdventure.val-=25;
-                    valueDramas.html(sliderAdventure.val()+"%");
+                if (sliderAdventure.value!=="0"){
+                    aux = parseInt(sliderAdventure.value);
+                    aux -= 25;
+                    sliderAdventure.value=aux.toString();
+                    valueAdventures.innerHTML = "";
+                    valueAdventures.innerHTML = sliderAdventure.value + "%";
                     setTimeout(createRecommendations(),2000);
                 }
                 break;
@@ -126,8 +163,5 @@ function handleMessage(message) {
             default:
                 break;
         }
-    }
-    else{
-        showStandByMessage();
     }
 }
